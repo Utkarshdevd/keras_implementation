@@ -12,7 +12,6 @@ class ResNet50obj(object):
         resnet_model.layers.pop()
         resnet_model.layers.pop()
 
-        print(K.shape(resnet_model.output))
         #resnet_model = Reshape((49, 2048)) (resnet_model.output)
         x = resnet_model.layers[-1].output
         reshaped = Reshape((49,2048))(x)
@@ -20,10 +19,10 @@ class ResNet50obj(object):
 
         for _,layer in enumerate(model.layers[:172]):
             layer.trainable = False
-            print ("{} layerName : {} layerDim: {} {}".format(_, layer.name, layer.output_shape, layer.trainable))
+            #print ("{} layerName : {} layerDim: {} {}".format(_, layer.name, layer.output_shape, layer.trainable))
         for _,layer in enumerate(model.layers[172:]):
             layer.trainable = True
-            print ("{} layerName : {} layerDim: {} {}".format(_, layer.name, layer.output_shape, layer.trainable))
+            #print ("{} layerName : {} layerDim: {} {}".format(_, layer.name, layer.output_shape, layer.trainable))
         
         model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy')
         #model.summary()
