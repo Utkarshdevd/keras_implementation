@@ -5,22 +5,38 @@ import numpy as np
 class SpatialAttention(Layer):
     def __init__(self, output_dim, **kwargs):
         self.output_dim = output_dim
-        super(SpatialAttention, **kwargs)
+        super(SpatialAttention, self).__init__(**kwargs)
 
     def build(self, input_shape):
-        k = input_shape[1]-1
-        d = input_shape[-1]
-        print "k: {}".format(k)
-        self.w_h = K.random_uniform_variable(shape=(k))
-        self.W_v = K.random_uniform_variable(shape=(k, d))
-        self.W_g = K.random_uniform_variable(shape=(k, d))
-        self.ones = K.ones(k)
+        print(input_shape)
+        k = input_shape[0][1]
+        d = input_shape[-1][1]
+        print("k: {}\nd: {}".format(k,d))
+
+        self.w_h = self.add_weight(name='w_h', shape=(k, 1,), initializer='uniform', trainable=True)
+        self.W_v = self.add_weight(name='W_v',shape=(k, d), initializer='uniform', trainable=True)
+        self.W_g = self.add_weight(name='W_g',shape=(k, d), initializer='uniform', trainable=True)
+        self.ones = K.ones(shape=(k,1))
+        self.k = k
 
         super(SpatialAttention, self).build(input_shape)
     
-    def call(self, x):
-        v = x[:-1]
-        h = x[-1]
-        z_t = self.w_h * K.tanh(self.W_v * v + self.W_g * h_t * K.transpose(self.ones))
+    def call(self, inputs, **kwargs):
+        V = inputs[0]
+        h_t = inputs[1]
+        #print(("V:{}\nh:{}\n{}").format(h_t, self.W_v))
+        W_vV = K.dot(V, K.transpose(self.W_v))
+        print ("W_vV: {}".format(W_vV))
+        W_gt = K.dot(h_t, K.transpose(self.W_g))
+        print ("W_gt: {}".format(W_gt))
+        z_t = K.dot(K.tanh(K.dot(W_gt, self.ones) + W_vV), self.w_h)
+        print ("z: {}".format(z_t))
         alpha_t = K.softmax(z_t)
+        alpha_t = K.squeeze(alpha_t, axis=2)
+        print ("alpha: {}".format(alpha_t))
+        c_t = K.batch_dot(alpha_t, V, axes=1)
+        print ("c_t: {}".format(c_t))
         return alpha_t
+
+    def compute_output_shape(self, input_shape):
+        return (input_shape[0], self.output_dim)
