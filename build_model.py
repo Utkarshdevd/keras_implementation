@@ -1,11 +1,8 @@
 from attention import SpatialAttention
 from encoder_resnet50 import ResNet50obj
 from keras.models import Model
-<<<<<<< HEAD
 from keras.layers import LSTM, Dense, TimeDistributed, RepeatVector, Activation, Flatten
-=======
 from keras.layers import LSTM, concatenate, RepeatVector, Reshape, TimeDistributed
->>>>>>> 656540df19d917d0d3f08142da2304c3d4837a4c
 from keras.layers.core import Lambda
 from keras import backend as K
 try:
@@ -26,21 +23,18 @@ timesteps = 18
 net50 = ResNet50obj()
 resnet_model = net50.GetModel()
 V = resnet_model.layers[-1].output
-<<<<<<< HEAD
 V = Dense(2048)(V)
 V = Activation('relu')(V)
 print("V", V)
 h = LSTM(512, return_sequences=True)(V)
 h_allt = TimeDistributed(Dense(2048))(h)
 print (h_allt, V)
-=======
 V = RepeatVector(18)(V)
 V = Reshape((49*2048,))(V)
 print(K.int_shape(V))
 h = TimeDistributed(LSTM(2048, return_sequences=True))(V)
 print(K.int_shape(h))
 print (h, V)
->>>>>>> 656540df19d917d0d3f08142da2304c3d4837a4c
 #h_expanded = Lambda(expand_dims, expand_dims_output_shape)(h)
 #print (h, h_expanded, V)
 attn = TimeDistributed(SpatialAttention(2048))([V,h])
