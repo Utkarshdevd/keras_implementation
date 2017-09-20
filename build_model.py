@@ -13,6 +13,7 @@ except ImportError:
 else:
     import sys
     sys.excepthook = IPython.core.ultratb.ColorTB()
+
 def expand_dims(x):
     return K.expand_dims(x, 1)
 
@@ -33,4 +34,4 @@ print (h, V)
 #print (h, h_expanded, V)
 attn = TimeDistributed(SpatialAttention(2048))([V,h])
 model = Model(inputs = resnet_model.input, outputs = attn)
-#model.summary()
+model.summary()
