@@ -1,5 +1,6 @@
 from keras import backend as K
 from keras.engine.topology import Layer
+from keras.layers import Reshape
 import numpy as np
 
 class SpatialAttention(Layer):
@@ -9,7 +10,7 @@ class SpatialAttention(Layer):
 
     def build(self, input_shape):
         print(input_shape)
-        k = input_shape[0][1]
+        k = 49
         d = input_shape[-1][1]
         print("k: {}\nd: {}".format(k,d))
 
@@ -22,7 +23,7 @@ class SpatialAttention(Layer):
         super(SpatialAttention, self).build(input_shape)
     
     def call(self, inputs, **kwargs):
-        V = inputs[0]
+        V = Reshape((49,2048))(inputs[0])
         h_t = inputs[1]
         #print(("V:{}\nh:{}\n{}").format(h_t, self.W_v))
         W_vV = K.dot(V, K.transpose(self.W_v))
