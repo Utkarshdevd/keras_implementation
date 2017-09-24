@@ -22,6 +22,7 @@ def expand_dims(x):
 def expand_dims_output_shape(input_shape):
     return (input_shape[0], 1, input_shape[1])
 
+timesteps = 18
 net50 = ResNet50obj()
 resnet_model = net50.GetModel()
 A = resnet_model.layers[-1].output
