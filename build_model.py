@@ -56,6 +56,6 @@ print (h, V)
 #h_expanded = Lambda(expand_dims, expand_dims_output_shape)(h)
 #print (h, h_expanded, V)
 attn = TimeDistributed(SpatialAttention(2048))([V,h])
-model = Model(inputs=resnet_model.input, outputs=attn)
+model = Model(inputs=[resnet_model.input, words], outputs=attn)
 #model.summary()
 del IPython
