@@ -351,13 +351,23 @@ class RNN(Layer):
             step = functools.partial(self.cell.call, training=training)
         else:
             step = self.cell.call
-        last_output, outputs, states = K_new.rnn(step,
+        '''
+        last_output, outputs, states, sT = K_new.rnn(step,
                                              inputs,
                                              initial_state,
                                              go_backwards=self.go_backwards,
                                              mask=mask,
                                              unroll=self.unroll,
                                              input_length=timesteps)
+        '''
+        last_output, outputs, states = K.rnn(step,
+                                             inputs,
+                                             initial_state,
+                                             go_backwards=self.go_backwards,
+                                             mask=mask,
+                                             unroll=self.unroll,
+                                             input_length=timesteps)
+        print("OUTPUTS: {}, {}, {}".format(K.int_shape(last_output), K.int_shape(outputs), states))
         if self.stateful:
             updates = []
             for i in range(len(states)):

@@ -114,6 +114,7 @@ class SentinelLSTMCell(Layer):
 
     def build(self, input_shape):
         input_dim = input_shape[-1]
+        print(input_shape)
         self.kernel = self.add_weight(shape=(input_dim, self.units * 4),
                                       name='kernel',
                                       initializer=self.kernel_initializer,
@@ -212,10 +213,18 @@ class SentinelLSTMCell(Layer):
         dp_mask = self._dropout_mask
         # dropout matrices for recurrent units
         rec_dp_mask = self._recurrent_dropout_mask
-        inputs = inputs[0]
+        print("wut {}\n{} \nwutwut{}".format(len(states), type(states[0]), inputs))
+        
         h_tm1 = states[0]  # previous memory state
         c_tm1 = states[1]  # previous carry state
 
+        try:
+            print("types: {} {} {}".format(K.int_shape(states[0]), K.int_shape(states[1]), K.int_shape(states[0])== K.int_shape(states[1])))
+        except:
+            print("ERROR")
+            h_tm1 = states[1]  # previous memory state
+            c_tm1 = states[2]  # previous carry state
+            
         if self.implementation == 1:
             if 0 < self.dropout < 1.:
                 inputs_i = inputs * dp_mask[0]
@@ -279,6 +288,6 @@ class SentinelLSTMCell(Layer):
         self.extra_outputs.append(s)
         all_c = K.concatenate([h,s])
         print("all_c: {}".format(all_c))
-        return [h,s], [h, c]
+        return all_c, [h, c]
 
 

@@ -4,6 +4,7 @@ from tensorflow.python.ops import control_flow_ops
 from keras.backend import expand_dims
 from keras.backend import zeros_like
 from keras.backend import reverse
+from keras.backend import int_shape
 
 def rnn(step_function, inputs, initial_states,
         go_backwards=False, mask=None, constants=None,
@@ -140,8 +141,8 @@ def rnn(step_function, inputs, initial_states,
         states = tuple(initial_states)
 
         time_steps = tf.shape(inputs)[0]
-        print(inputs[0], initial_states, constants)
-        outputs, _ = step_function(inputs[0], initial_states + constants)
+        outputs, _ = step_function(inputs, initial_states + constants)
+        print("backend {},----- {}".format(int_shape(outputs[0]), len(outputs)))
         s = outputs[1]
         outputs = outputs[0]
         output_ta = tensor_array_ops.TensorArray(
@@ -149,7 +150,7 @@ def rnn(step_function, inputs, initial_states,
             size=time_steps,
             tensor_array_name='output_ta')
         s_output_ta = tensor_array_ops.TensorArray(
-            dtype=outputs.dtype,
+            dtype=s.dtype,
             size=time_steps,
             tensor_array_name='s_output_ta')
         input_ta = tensor_array_ops.TensorArray(
@@ -222,14 +223,16 @@ def rnn(step_function, inputs, initial_states,
                     new_state.set_shape(state.get_shape())
                 output_ta_t = output_ta_t.write(time, output)
                 s_output_ta_t = s_output_ta_t.write(time, s)
-                return (time + 1, output_ta_t) + tuple(new_states) + (time+1, output_ta_t)
+                return (time + 1, output_ta_t) + (time+1, s_output_ta_t) + tuple(new_states) 
+                #return (time + 1, output_ta_t) + tuple(new_states)
 
         final_outputs = control_flow_ops.while_loop(
             cond=lambda time, *_: time < time_steps,
             body=_step,
-            loop_vars=(time, output_ta) + states + (time, s_output_ta),
+            loop_vars=(time, output_ta)+ (time, s_output_ta) + states,
             parallel_iterations=32,
             swap_memory=True)
+        print(final_outputs)
         last_time = final_outputs[0]
         output_ta = final_outputs[1]
         new_states = final_outputs[2:]
