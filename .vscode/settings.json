@@ -1,4 +1,8 @@
 {
     "python.linting.pylintEnabled": true,
+<<<<<<< HEAD
     "python.pythonPath": "/Users/utkarshdwivedi/Documents/virtualpy3/keras/bin/python"
+=======
+    "python.pythonPath": "../../bin/python"
+>>>>>>> c32699dc66c6354e5fb09cf456b3665c7db6f848
 }
