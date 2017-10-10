@@ -35,16 +35,19 @@ class SpatialAttention(Layer):
         W_gt = K.dot(h_t, K.transpose(self.W_g))
         print ("W_gt: {}".format(K.int_shape(W_gt)))
         z_t = K.dot(K.tanh(K.dot(W_gt, self.ones) + W_vV), self.w_h)
-        #z_t = K.
+        z_t = K.permute_dimensions(z_t, (0,2,1))
         print ("z: {}".format(K.int_shape(z_t)))
         W_st = K.tanh(K.dot(s_t, K.transpose(self.W_s))+W_gt)
         print ("W_st: {}".format(K.int_shape(W_st)))
         sft_beta_t = K.dot(self.w_h_s, K.transpose(W_st))
         print ("sft: {}".format(K.int_shape(sft_beta_t)))
-        alpha_cap_t = K.softmax([z_t, sft_beta_t])
-        alpha_cap_t = K.squeeze(alpha_cap_t[-1:], axis=2)
-        alpha_t = alpha_cap_t[:-1]
-        beta_t = alpha_cap_t[-1]
+        sft_beta_t = K.expand_dims(sft_beta_t, axis=-1)
+        sft_beta_t = K.permute_dimensions(sft_beta_t, (1,2,0))
+        print ("sft: {}".format(K.int_shape(sft_beta_t)))
+        alpha_cap_t = K.softmax(K.concatenate([z_t, sft_beta_t]))
+        print ("act: {}".format(K.int_shape(alpha_cap_t)))
+        alpha_t = K.permute_dimensions(alpha_cap_t[:,:,:-1], (0,2,1))
+        beta_t = alpha_cap_t[:,:,-1]
         print ("alpha: {}".format(alpha_t))
         c_t = K.batch_dot(alpha_t, V, axes=1)
         print ("c_t: {}".format(c_t))
