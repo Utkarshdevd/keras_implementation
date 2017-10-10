@@ -23,7 +23,7 @@ def slice_before(x):
     return x[:,:,:512]
 
 def slice_after(x):
-    return x[:,:,:512]
+    return x[:,:,512:]
 
 def expand_dims(x):
     return K.expand_dims(x, 1)
