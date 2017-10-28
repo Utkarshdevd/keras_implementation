@@ -33,7 +33,7 @@ class ResNet50obj(object):
         return self.result_model
 
 def main():
-    resnet = ResNet50obj()
+    resnet = ResNet50obj()        
 
 if __name__ == '__main__':
     main()
