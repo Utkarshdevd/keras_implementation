@@ -50,9 +50,11 @@ class SpatialAttention(Layer):
         beta_t = alpha_cap_t[:,:,-1]
         print ("alpha: {}".format(alpha_t))
         c_t = K.batch_dot(alpha_t, V, axes=1)
-        print ("c_t: {}".format(c_t))
+        print ("c_t: {} :: b_t: {}".format(c_t, beta_t))
+        s_t = K.expand_dims(s_t, axis=1)
         c_cap_t = beta_t * s_t + (1-beta_t) * c_t
-        return c_cap_t + h_t
+        print ("c_cap_t: {}".format(K.int_shape(c_cap_t)))
+        return c_cap_t
 
     def compute_output_shape(self, input_shape):
         return (input_shape[0], self.output_dim)

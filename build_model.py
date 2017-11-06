@@ -10,14 +10,7 @@ from keras.layers.merge import Concatenate
 from SentinelLSTMCell import SentinelLSTMCell
 #from SentinelLSTMLayer import RNN as RNN_new
 from SentinelRNN import RNN as RNN_new
-try:
-    import IPython.core.ultratb
-except ImportError:
-    # No IPython. Use default exception printing.
-    pass
-else:
-    import sys
-    sys.excepthook = IPython.core.ultratb.ColorTB()
+
 
 def slice_before(x):
     return x[:,:,:512]
@@ -38,11 +31,13 @@ def matrix_mean_outputShape(A_shape):
     print("A_shape:{}".format(A_shape))
     return (A_shape[0],1,A_shape[2])
 
-class Model:
-    def __init__():
+class FullModel:
+
+    def __init__(self):
+        
         pass
     
-    def BuildAndGetModel():
+    def BuildAndGetModel(self):
         sentence_length = 18
         vocab_size = 10000
         net50 = ResNet50obj()
@@ -79,5 +74,5 @@ class Model:
         outputs = KerasTD(Dense(vocab_size, activation='softmax'))(attn)
         model = Model(inputs=[resnet_model.input, words], outputs=outputs)
         model.summary()
-        del IPython
+        
         return model

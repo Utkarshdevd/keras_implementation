@@ -1,4 +1,4 @@
-from utils.im_proc import read_image
+from .im_proc import read_image
 from keras.applications.imagenet_utils import preprocess_input
 from keras.utils.np_utils import to_categorical
 import numpy as np
@@ -22,9 +22,9 @@ class threadsafe_iter:
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         with self.lock:
-            return self.it.next()
+            return self.it.__next__()
 
 
 def threadsafe_generator(f):
@@ -44,7 +44,7 @@ class DataLoader(object):
         self.imsize = args_dict.imsize
 
     def get_splits_and_vocab(self):
-        data = json.load(open(os.path.join(self.data_folder,'data',self.json_file),'r'))
+        data = json.load(open(os.path.join(self.data_folder,'',self.json_file),'r'))
 
         splits = {'train':[],'val':[],'test':[]}
         idxs = {'train':[],'val':[],'test':[]}
@@ -77,7 +77,7 @@ class DataLoader(object):
         image_ids = image_ids[partition]
         vocab_size = len(vocab.keys())
 
-        data = h5py.File(os.path.join(self.data_folder,'data',self.h5file),'r')
+        data = h5py.File(os.path.join(self.data_folder,'',self.h5file),'r')
         ims = data['images']
         caps = data['labels']
         starts = data['label_start_ix']

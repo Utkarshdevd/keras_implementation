@@ -182,12 +182,12 @@ def main(params):
   f.create_dataset("label_start_ix", dtype='uint32', data=label_start_ix)
   f.create_dataset("label_end_ix", dtype='uint32', data=label_end_ix)
   f.create_dataset("label_length", dtype='uint32', data=label_length)
-  dset = f.create_dataset("images", (N,3,256,256), dtype='uint8') # space for resized images
+  dset = f.create_dataset("images", (N,3,224,224), dtype='uint8') # space for resized images
   for i,img in enumerate(imgs):
     # load the image
     I = imread(os.path.join(os.path.expanduser(params['images_root']), img['file_path']))
     try:
-        Ir = imresize(I, (256,256))
+        Ir = imresize(I, (224,224))
     except:
         print ('failed resizing image %s - see http://git.io/vBIE0' % (img['file_path'],))
         raise

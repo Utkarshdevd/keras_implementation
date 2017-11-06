@@ -20,7 +20,7 @@ def get_parser():
                         default = '/seq/segmentation/COCO/tools',
                         help='COCO database')
     parser.add_argument('-data_folder', dest='data_folder',
-                        default = '/work/asalvador/sat_keras/',
+                        default = 'data/coco',
                         help='save folder')
 
     # model parts, inputs
@@ -28,7 +28,7 @@ def get_parser():
                         default = 'resnet', choices=['vgg16','vgg19','resnet'],
                         help='Pretrained CNN to use')
     parser.add_argument('-imsize', dest='imsize',
-                        default = 256, help='Image size',type=int)
+                        default = 224, help='Image size',type=int)
     parser.add_argument('-vocab_size', dest='vocab_size',
                         default = 9570, help='Vocabulary size' ,type=int)
     parser.add_argument('-n_caps', dest='n_caps',
@@ -84,7 +84,7 @@ def get_parser():
                         help='Number of data loading threads',type=int)
     parser.add_argument('-es_prev_words',dest='es_prev_words', default = 'gen',
                         choices=['gt','gen'])
-    parser.add_argument('-es_metric',dest='es_metric', default = 'CIDEr',
+    parser.add_argument('-es_metric',dest='es_metric', default = 'loss',
                         help='Early stopping metric',
                         choices=['loss','CIDEr','Bleu_4','Bleu_3','Bleu_2',
                                  'Bleu_1','ROUGE_L','METEOR'])

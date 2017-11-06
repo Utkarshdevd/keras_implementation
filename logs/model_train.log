@@ -1,0 +1,15 @@
+Traceback [1;36m(most recent call last)[0m:
+  File [0;32m"/home/utkarsh/.vscode/extensions/donjayamanne.python-0.7.0/pythonFiles/PythonTools/visualstudio_py_launcher.py"[0m, line [0;32m91[0m, in [0;35m<module>[0m
+    vspd.debug(filename, port_num, debug_id, debug_options, currentPid, run_as)
+  File [0;32m"/home/utkarsh/.vscode/extensions/donjayamanne.python-0.7.0/pythonFiles/PythonTools/visualstudio_py_debugger.py"[0m, line [0;32m2624[0m, in [0;35mdebug[0m
+    exec_file(file, globals_obj)
+  File [0;32m"/home/utkarsh/.vscode/extensions/donjayamanne.python-0.7.0/pythonFiles/PythonTools/visualstudio_py_util.py"[0m, line [0;32m119[0m, in [0;35mexec_file[0m
+    exec_code(code, file, global_variables)
+  File [0;32m"/home/utkarsh/.vscode/extensions/donjayamanne.python-0.7.0/pythonFiles/PythonTools/visualstudio_py_util.py"[0m, line [0;32m95[0m, in [0;35mexec_code[0m
+    exec(code_obj, global_variables)
+  File [0;32m"/home/utkarsh/Documents/virtualPy3/keras/code/gaze-n-gan/train.py"[0m, line [0;32m223[0m, in [0;35m<module>[0m
+    model, model_val = init_models(args_dict)
+[1;36m  File [1;32m"/home/utkarsh/Documents/virtualPy3/keras/code/gaze-n-gan/train.py"[1;36m, line [1;32m189[1;36m, in [1;35minit_models[1;36m[0m
+[1;33m    model = get_model(args_dict)[0m
+[1;31mNameError[0m[1;31m:[0m name 'get_model' is not defined
+
